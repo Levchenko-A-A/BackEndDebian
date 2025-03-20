@@ -26,7 +26,7 @@ namespace BackEndDebian.Controller
                 Device? device = JsonSerializer.Deserialize<Device>(json);
                 if (device == null)
                 {
-                    SendResponse(context, "Ошибка: некорректные данные");
+                    await DataHendler.SendJsonResponse(context, "Ошибка: некорректные данные");
                 }
                 Device? dev = await db.Devices.FirstOrDefaultAsync(u => u.Name == device!.Name);
                 if (dev == null)
@@ -44,7 +44,7 @@ namespace BackEndDebian.Controller
                 }
                 else
                     responseText = "Error";
-                SendResponse(context, responseText);
+                await DataHendler.SendJsonResponse(context, responseText);
             }
         }
         public async static void delDevice(string json, HttpListenerContext context)
@@ -64,7 +64,7 @@ namespace BackEndDebian.Controller
                 {
                     responseText = "Error";
                 }
-                SendResponse(context, responseText);
+                await DataHendler.SendJsonResponse(context, responseText);
             }
         }
         public async static void updateDevice(string json, HttpListenerContext context)
@@ -90,20 +90,8 @@ namespace BackEndDebian.Controller
                     await db.SaveChangesAsync();
                     responseText = "OK";
                 }
-                SendResponse(context, responseText);
+                await DataHendler.SendJsonResponse(context, responseText);
             }
-        }
-        public async static void SendResponse(HttpListenerContext context, string message)
-        {
-            var response = context.Response;
-            byte[] buffer = Encoding.UTF8.GetBytes(message);
-            response.ContentLength64 = buffer.Length;
-            response.ContentType = "application/json";
-            response.ContentEncoding = Encoding.UTF8;
-            using Stream output = response.OutputStream;
-            await output.WriteAsync(buffer);
-            await output.FlushAsync();
-            Console.WriteLine("Запрос обработан");
         }
     }
 }

@@ -26,7 +26,7 @@ namespace BackEndDebian.Controller
                 Manufacturer? manufacturer = JsonSerializer.Deserialize<Manufacturer>(json);
                 if (manufacturer == null)
                 {
-                    SendResponse(context, "Ошибка: некорректные данные");
+                    await DataHendler.SendJsonResponse(context, "Ошибка: некорректные данные");
                 }
                 Manufacturer? user = await db.Manufacturers.FirstOrDefaultAsync(u => u.Name == manufacturer!.Name);
                 if (user == null)
@@ -41,7 +41,7 @@ namespace BackEndDebian.Controller
                 }
                 else
                     responseText = "Error";
-                SendResponse(context, responseText);
+                await DataHendler.SendJsonResponse(context, responseText);
             }
         }
         public async static void getCategoryId(string json, HttpListenerContext context)
@@ -55,7 +55,7 @@ namespace BackEndDebian.Controller
                     Console.WriteLine(manuf.Name);
                     string jsonPerson = JsonSerializer.Serialize<Manufacturer>(manuf);
                     string responseText = jsonPerson;
-                    SendResponse(context, responseText);
+                    await DataHendler.SendJsonResponse(context, responseText);
                 }
             }
         }
@@ -76,7 +76,7 @@ namespace BackEndDebian.Controller
                 {
                     responseText = "Error";
                 }
-                SendResponse(context, responseText);
+                await DataHendler.SendJsonResponse(context, responseText);
             }
         }
         public async static void updateManufacturer(string json, HttpListenerContext context)
@@ -99,20 +99,8 @@ namespace BackEndDebian.Controller
                     await db.SaveChangesAsync();
                     responseText = "OK";
                 }
-                SendResponse(context, responseText);
+                await DataHendler.SendJsonResponse(context, responseText);
             }
-        }
-        public async static void SendResponse(HttpListenerContext context, string message)
-        {
-            var response = context.Response;
-            byte[] buffer = Encoding.UTF8.GetBytes(message);
-            response.ContentLength64 = buffer.Length;
-            response.ContentType = "application/json";
-            response.ContentEncoding = Encoding.UTF8;
-            using Stream output = response.OutputStream;
-            await output.WriteAsync(buffer);
-            await output.FlushAsync();
-            Console.WriteLine("Запрос обработан");
         }
     }
 }

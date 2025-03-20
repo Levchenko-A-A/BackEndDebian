@@ -26,7 +26,7 @@ namespace BackEndDebian.Controller
                 Personrole? personRoles = JsonSerializer.Deserialize<Personrole>(json);
                 if (personRoles == null)
                 {
-                    SendResponse(context, "Ошибка: некорректные данные");
+                    await DataHendler.SendJsonResponse(context, "Ошибка: некорректные данные");
                 }
                 Personrole? user = await db.Personroles.FirstOrDefaultAsync(u => u.Personid == personRoles!.Personid && u.Roleid == personRoles!.Roleid);
                 if (user == null)
@@ -41,7 +41,7 @@ namespace BackEndDebian.Controller
                 }
                 else
                     responseText = "Error";
-                SendResponse(context, responseText);
+                await DataHendler.SendJsonResponse(context, responseText);
             }
         }
         public async static void delPersonRole(string json, HttpListenerContext context)
@@ -61,7 +61,7 @@ namespace BackEndDebian.Controller
                 {
                     responseText = "Error";
                 }
-                SendResponse(context, responseText);
+                await DataHendler.SendJsonResponse(context, responseText);
             }
         }
         public async static void updatePersonRole(string json, HttpListenerContext context)
@@ -84,7 +84,7 @@ namespace BackEndDebian.Controller
                     await db.SaveChangesAsync();
                     responseText = "OK";
                 }
-                SendResponse(context, responseText);
+                await DataHendler.SendJsonResponse(context, responseText);
             }
         }
         public async static void SendResponse(HttpListenerContext context, string message)
