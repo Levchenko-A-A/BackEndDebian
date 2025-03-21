@@ -1,10 +1,10 @@
 ﻿using System.Net;
 using BackEndDebian.Controller;
 //Scaffold-DbContext "Host=193.104.57.148;Port=5432;Database=dbinventory;Username=debianone;Password=toor" Npgsql.EntityFrameworkCore.PostgreSQL
-
+//Test
 HttpClient httpClient = new HttpClient();
 HttpListener server = new HttpListener();
-server.Prefixes.Add("http://127.0.0.1:8888/connection/");
+server.Prefixes.Add("http://127.0.0.1:8080/connection/");
 server.Start();
 while (true)
 {
