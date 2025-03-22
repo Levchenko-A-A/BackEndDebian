@@ -87,9 +87,9 @@ namespace BackEndDebian.Controller
                     if (await db.Devices.FindAsync(temp.Deviceid) is Device found)
                     {
                         found.Name = temp.Name;
-                        found.Category = temp.Category;
-                        found.Manufacturer = temp.Manufacturer;
-                        found.Location = temp.Location;
+                        found.Categoryid = temp.Categoryid;
+                        found.Manufacturerid = temp.Manufacturerid;
+                        found.Locationid = temp.Locationid;
                         found.Description = temp.Description;
                     }
                     await db.SaveChangesAsync();
