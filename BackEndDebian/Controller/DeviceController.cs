@@ -40,8 +40,8 @@ namespace BackEndDebian.Controller
                     {
                         Name = device!.Name,
                         Categoryid = device.Categoryid,
-                        Manufacturer = device.Manufacturer,
-                        Location = device.Location,
+                        Manufacturerid = device.Manufacturerid,
+                        Locationid = device.Locationid,
                         Description = device.Description
                     });
                     await db.SaveChangesAsync();

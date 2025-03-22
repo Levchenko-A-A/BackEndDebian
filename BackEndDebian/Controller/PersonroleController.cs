@@ -15,8 +15,13 @@ namespace BackEndDebian.Controller
     {
         public async static void getPersonRole(HttpListenerContext context)
         {
-            string json = await DataHendler.GetDataAsJson<Personrole>(db => db.Personroles);
-            await DataHendler.SendJsonResponse(context, json);
+            using (DbinventoryContext db = new DbinventoryContext())
+            {
+                List<Personrole> personRole = db.Personroles.ToList();
+                string json = JsonSerializer.Serialize<List<Personrole>>(personRole);
+                string responseText = json;
+                DataHendler.SendResponse(context, responseText);
+            }
         }
         public async static void addPersonRole(string json, HttpListenerContext context)
         {
