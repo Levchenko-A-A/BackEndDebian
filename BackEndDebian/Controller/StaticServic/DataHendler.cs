@@ -24,7 +24,7 @@ namespace BackEndDebian.Controller.StaticServic
             string responseText = json;
             SendResponse(context, responseText);
         }
-        private async static void SendResponse(HttpListenerContext context, string message)
+        public async static void SendResponse(HttpListenerContext context, string message)
         {
             var response = context.Response;
             byte[] buffer = Encoding.UTF8.GetBytes(message);

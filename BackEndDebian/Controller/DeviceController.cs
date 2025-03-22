@@ -15,8 +15,13 @@ namespace BackEndDebian.Controller
     {
         public async static void getDevices(HttpListenerContext context)
         {
-            string json = await DataHendler.GetDataAsJson<Device>(db => db.Devices);
-            await DataHendler.SendJsonResponse(context, json);
+            using (DbinventoryContext db = new DbinventoryContext())
+            {
+                List<Device> devices = db.Devices.ToList();
+                string json = JsonSerializer.Serialize<List<Device>>(devices);
+                string responseText = json;
+                DataHendler.SendResponse(context, responseText);
+            }
         }
         public async static void addDevice(string json, HttpListenerContext context)
         {
