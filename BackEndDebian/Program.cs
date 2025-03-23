@@ -69,6 +69,7 @@ while (true)
             case "role":
                 {
                     if (query == "getRolleAll") RoleController.getRole(context);
+                    if (query == "getRolleId")
                     else RoleController.getRoleId(query, context);
                 }
                 break;
