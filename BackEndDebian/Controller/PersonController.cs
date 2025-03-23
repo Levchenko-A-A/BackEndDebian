@@ -114,8 +114,9 @@ namespace BackEndDebian.Controller
                 string pasHash = user.Passwordhash.ToString();
                 string saltHash = user.Salt.ToString();
                 bool isPasswordValid = VerifyPassword(per, pasHash, saltHash);
+                System.Console.WriteLine(isPasswordValid);
                 string userId = user.Personid.ToString();
-                answer = isPasswordValid ? userId : "or";
+                answer = isPasswordValid ? userId : "Erorr";
             }
             string jsonTwo = JsonSerializer.Serialize<string>(answer);
             string responseText = jsonTwo;
