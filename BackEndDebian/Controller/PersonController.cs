@@ -109,14 +109,17 @@ namespace BackEndDebian.Controller
                 {
                     await DataHendler.SendJsonResponse(context, "Ошибка: некорректные данные");
                 }
-                Person? user = await db.Persons.FirstAsync(u => u.Personname == jsonUser!.UserName);
-                string per = jsonUser!.Password!.ToString();
-                string pasHash = user.Passwordhash.ToString();
-                string saltHash = user.Salt.ToString();
-                bool isPasswordValid = VerifyPassword(per, pasHash, saltHash);
-                System.Console.WriteLine(isPasswordValid);
-                string userId = user.Personid.ToString();
-                answer = isPasswordValid ? userId : "Erorr";
+                Person? user = await db.Persons.FirstOrDefaultAsync(u => u.Personname == jsonUser!.UserName);
+                if (user != null)
+                {
+                    string per = jsonUser!.Password!.ToString();
+                    string pasHash = user.Passwordhash.ToString();
+                    string saltHash = user.Salt.ToString();
+                    bool isPasswordValid = VerifyPassword(per, pasHash, saltHash);
+                    string userId = user.Personid.ToString();
+                    answer = isPasswordValid ? userId : "Error";
+                }
+                else answer = "Error";
             }
             string jsonTwo = JsonSerializer.Serialize<string>(answer);
             string responseText = jsonTwo;
