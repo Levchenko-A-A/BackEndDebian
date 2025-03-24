@@ -15,11 +15,11 @@ while (true)
     var encoding = context.Request.ContentEncoding;
     var reader = new StreamReader(body, encoding);
     string query = reader.ReadToEnd();
-    string table = context.Request.Headers[0]!;
+    string table = context.Request.Headers["table"]!;
     Console.WriteLine($"Received reguest: {context.Request.Url}");
     Console.WriteLine($"Metod: {method}");
     Console.WriteLine($"Table: {table}");
-    Console.WriteLine($"Headers[0]: {context.Request.Headers["table"]}");
+    Console.WriteLine($"Headers[0]: {context.Request.Headers[0]}");
     Console.WriteLine($"Headers[1]: {context.Request.Headers[1]}");
     Console.WriteLine($"QueryString: {context.Request.QueryString}");
     Console.WriteLine($"UserAgent: {context.Request.UserAgent}");
