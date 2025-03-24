@@ -44,7 +44,7 @@ namespace BackEndDebian.Controller
                 {
                     await DataHendler.SendJsonResponse(context, "Ошибка: некорректные данные");
                 }
-                Person? user = await db.Persons.FirstOrDefaultAsync(u => u.Personname == person.Personname);
+                Person? user = await db.Persons.FirstOrDefaultAsync(u => u.Personname == person!.Personname);
                 if (user == null)
                 {
                     byte[] salt = GenerateSalt();
@@ -88,7 +88,7 @@ namespace BackEndDebian.Controller
             using (DbinventoryContext db = new DbinventoryContext())
             {
                 Person? temp = JsonSerializer.Deserialize<Person>(json);
-                if (await db.Persons.FindAsync(temp.Personid) is Person found)
+                if (await db.Persons.FindAsync(temp!.Personid) is Person found)
                 {
                     found.Personname = temp.Personname;
                     found.Passwordhash = temp.Passwordhash;
