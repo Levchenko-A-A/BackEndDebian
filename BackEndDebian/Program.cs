@@ -4,8 +4,8 @@ using BackEndDebian.Controller;
 
 HttpClient httpClient = new HttpClient();
 HttpListener server = new HttpListener();
-//server.Prefixes.Add("http://193.104.57.148:8080/connection/");
-server.Prefixes.Add("http://127.0.0.1:8888/connection/");
+server.Prefixes.Add("http://193.104.57.148:8080/connection/");
+//server.Prefixes.Add("http://127.0.0.1:8888/connection/");
 server.Start();
 while (true)
 {
