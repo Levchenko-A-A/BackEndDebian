@@ -18,4 +18,9 @@ public partial class Person
     public DateTime? Createdat { get; set; }
     [JsonIgnore]
     public virtual ICollection<Personrole> Personroles { get; set; } = new List<Personrole>();
+
+    //public bool IsAdmin { get; set; } // новое для  Checkbox
+    //public bool IsManager { get; set; } // новое для  Checkbox
+    //public bool IsUser { get; set; }    //новое для  Checkbox
+    //public bool IsGuest { get; set; } //новое для  Checkbox
 }
