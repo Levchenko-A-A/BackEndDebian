@@ -46,7 +46,7 @@ namespace BackEndDebian.Controller
                 }
                 else
                     responseText = "Error";
-                await DataHendler.SendJsonResponse(context, responseText);
+                //await DataHendler.SendJsonResponse(context, responseText);
             }
         }
         public async static void delPersonRole(string json, HttpListenerContext context)

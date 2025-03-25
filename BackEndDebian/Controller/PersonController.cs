@@ -39,7 +39,7 @@ namespace BackEndDebian.Controller
             using (DbinventoryContext db = new DbinventoryContext())
             {
                 string responseText;
-                Person? person = JsonSerializer.Deserialize<Person>(json);
+                NewPerson? person = JsonSerializer.Deserialize<NewPerson>(json);
                 if(person==null)
                 {
                     await DataHendler.SendJsonResponse(context, "Ошибка: некорректные данные");
@@ -56,6 +56,21 @@ namespace BackEndDebian.Controller
                         Salt = Convert.ToBase64String(salt)
                     });
                     await db.SaveChangesAsync();
+                    //
+                    user = await db.Persons.FirstOrDefaultAsync(u => u.Personname == person!.Personname);
+                    Personrole personrole = new Personrole();
+                    personrole.Personid = user!.Personid;
+                    if (person.IsAdmin)
+                        personrole.Roleid = 1;
+                    if(person.IsManager)
+                        personrole.Roleid = 1;
+                    if (person.IsUser)
+                        personrole.Roleid = 3;
+                    if (person.IsGuest)
+                        personrole.Roleid = 4;
+                    string jsonPerRole = JsonSerializer.Serialize<Personrole>(personrole);
+                    PersonroleController.addPersonRole(jsonPerRole, context);
+                    //
                     responseText = "OK";
                 }
                 else

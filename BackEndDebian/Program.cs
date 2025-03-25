@@ -4,8 +4,8 @@ using BackEndDebian.Controller;
 
 HttpClient httpClient = new HttpClient();
 HttpListener server = new HttpListener();
-server.Prefixes.Add("http://193.104.57.148:8080/connection/");
-//server.Prefixes.Add("http://127.0.0.1:8888/connection/");
+//server.Prefixes.Add("http://193.104.57.148:8080/connection/");
+server.Prefixes.Add("http://127.0.0.1:8888/connection/");
 server.Start();
 while (true)
 {
@@ -15,7 +15,8 @@ while (true)
     var encoding = context.Request.ContentEncoding;
     var reader = new StreamReader(body, encoding);
     string query = reader.ReadToEnd();
-    string table = context.Request.Headers["table"]!;
+    string table = context.Request.Headers[0]!;
+    //string table = context.Request.Headers["table"]!;
     Console.WriteLine($"Received reguest: {context.Request.Url}");
     Console.WriteLine($"Metod: {method}");
     Console.WriteLine($"Table: {table}");
