@@ -1,7 +1,10 @@
-﻿using System.Net;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using BackEndDebian.Controller;
+using BackEndDebian.Model;
 //Scaffold-DbContext "Host=193.104.57.148;Port=5432;Database=dbinventory;Username=debianone;Password=toor" Npgsql.EntityFrameworkCore.PostgreSQL
 
+List<JwToken> jwToken = new List<JwToken>();
 HttpClient httpClient = new HttpClient();
 HttpListener server = new HttpListener();
 //server.Prefixes.Add("http://193.104.57.148:8080/connection/");
@@ -15,17 +18,23 @@ while (true)
     var encoding = context.Request.ContentEncoding;
     var reader = new StreamReader(body, encoding);
     string query = reader.ReadToEnd();
-    //string table = context.Request.Headers[0]!;
     string table = context.Request.Headers["table"]!;
     Console.WriteLine($"Received reguest: {context.Request.Url}");
     Console.WriteLine($"Metod: {method}");
     Console.WriteLine($"Table: {table}");
+    foreach (var h in context.Request.Headers)
+    {
+        Console.WriteLine($"Headers[0]: {h}");
+    }
     Console.WriteLine($"Headers[0]: {context.Request.Headers[0]}");
     Console.WriteLine($"Headers[1]: {context.Request.Headers[1]}");
     Console.WriteLine($"QueryString: {context.Request.QueryString}");
     Console.WriteLine($"UserAgent: {context.Request.UserAgent}");
     Console.WriteLine($"HemoteEndPoint: {context.Request.RemoteEndPoint}");
     Console.WriteLine("-------------------------");
+    if (method == "POST" && table == "verifyPasswordPerson")
+        PersonController.chekPassword(query, context, jwToken);
+    if (jwToken.Contains(context.Request.Headers[0].ToString()))
     if (method == "POST")
     {
         switch (table)
@@ -37,8 +46,8 @@ while (true)
             case "role": RoleController.addRole(query, context); break;
             case "personrole": PersonroleController.addPersonRole(query, context); break;
             case "device": DeviceController.addDevice(query, context); break;
-            case "verifyPasswordPerson": PersonController.chekPassword(query, context); break;
-            case "ValidateToken": PersonController.validateToken(query, context); break;
+            //case "verifyPasswordPerson": PersonController.chekPassword(query, context, jwToken); break;
+            //case "ValidateToken": PersonController.validateToken(query, context); break;
         }
     }
     else if (method == "GET")
