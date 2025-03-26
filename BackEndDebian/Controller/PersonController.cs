@@ -114,9 +114,18 @@ namespace BackEndDebian.Controller
                 await DataHendler.SendJsonResponse(context, responseText);
             }
         }
+        public async static void validateToken(string json, HttpListenerContext context)
+        {
+            string jsonRes;
+            if (JwtService.ValidateToken(json))
+                jsonRes = "Ok";
+            else jsonRes = "Error";
+            await DataHendler.SendJsonResponse(context, jsonRes);
+        }
         public async static void chekPassword(string json, HttpListenerContext context)
         {
             string answer;
+            string token;
             using (DbinventoryContext db = new DbinventoryContext())
             {
                 var jsonUser = JsonSerializer.Deserialize<JsonUser>(json);
@@ -131,8 +140,14 @@ namespace BackEndDebian.Controller
                     string pasHash = user.Passwordhash.ToString();
                     string saltHash = user.Salt.ToString();
                     bool isPasswordValid = VerifyPassword(per, pasHash, saltHash);
+                    //
+                    var jwtService = new JwtService("Cifra39-Cifra39-Cifra39-Cifra39-Cifra39", "BackEndDebian", "FrontClient");
+                    string? role = "Admin";
+                    token = jwtService.GenerateToken(jsonUser.UserName!, role);
                     string userId = user.Personid.ToString();
-                    answer = isPasswordValid ? userId : "Error";
+                    answer = token;
+                    //answer = isPasswordValid ? userId : "Error";
+                    
                 }
                 else answer = "Error";
             }

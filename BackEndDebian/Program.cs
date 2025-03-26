@@ -4,8 +4,8 @@ using BackEndDebian.Controller;
 
 HttpClient httpClient = new HttpClient();
 HttpListener server = new HttpListener();
-server.Prefixes.Add("http://193.104.57.148:8080/connection/");
-//server.Prefixes.Add("http://127.0.0.1:8888/connection/");
+//server.Prefixes.Add("http://193.104.57.148:8080/connection/");
+server.Prefixes.Add("http://127.0.0.1:8888/connection/");
 server.Start();
 while (true)
 {
@@ -38,6 +38,7 @@ while (true)
             case "personrole": PersonroleController.addPersonRole(query, context); break;
             case "device": DeviceController.addDevice(query, context); break;
             case "verifyPasswordPerson": PersonController.chekPassword(query, context); break;
+            case "ValidateToken": PersonController.validateToken(query, context); break;
         }
     }
     else if (method == "GET")
