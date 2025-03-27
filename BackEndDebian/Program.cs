@@ -5,6 +5,7 @@ using BackEndDebian.Model;
 //Scaffold-DbContext "Host=193.104.57.148;Port=5432;Database=dbinventory;Username=debianone;Password=toor" Npgsql.EntityFrameworkCore.PostgreSQL
 
 List<JwToken> jwToken = new List<JwToken>();
+var jwtService = new JwtService("Cifra39-Cifra39-Cifra39-Cifra39-Cifra39", "BackEndDebian", "FrontClient");
 HttpClient httpClient = new HttpClient();
 HttpListener server = new HttpListener();
 //server.Prefixes.Add("http://193.104.57.148:8080/connection/");
@@ -19,22 +20,25 @@ while (true)
     var reader = new StreamReader(body, encoding);
     string query = reader.ReadToEnd();
     string table = context.Request.Headers["table"]!;
+
     Console.WriteLine($"Received reguest: {context.Request.Url}");
     Console.WriteLine($"Metod: {method}");
     Console.WriteLine($"Table: {table}");
-    foreach (var h in context.Request.Headers)
-    {
-        Console.WriteLine($"Headers[0]: {h}");
-    }
     Console.WriteLine($"Headers[0]: {context.Request.Headers[0]}");
     Console.WriteLine($"Headers[1]: {context.Request.Headers[1]}");
     Console.WriteLine($"QueryString: {context.Request.QueryString}");
     Console.WriteLine($"UserAgent: {context.Request.UserAgent}");
     Console.WriteLine($"HemoteEndPoint: {context.Request.RemoteEndPoint}");
     Console.WriteLine("-------------------------");
+
+    string authHeader = context.Request.Headers["Authorization"]!;
+    string token = authHeader?.StartsWith("Bearer ") == true ? authHeader.Substring(7) : null;
+    bool requiresAuth = !(method == "POST" && table == "verifyPasswordPerson");
+
     if (method == "POST" && table == "verifyPasswordPerson")
         PersonController.chekPassword(query, context, jwToken);
-    if (jwToken.Contains(context.Request.Headers[0].ToString()))
+
+    if (jwToken.Contains(context.Request.Headers[0]()))
     if (method == "POST")
     {
         switch (table)

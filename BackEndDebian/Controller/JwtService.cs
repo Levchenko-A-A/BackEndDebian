@@ -38,7 +38,7 @@ namespace BackEndDebian.Controller
                 issuer: _issuer,
                 audience: _audience,
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(time), // Время жизни токена
+                expires: DateTime.Now.AddMinutes(time),
                 signingCredentials: credentials
             );
             JwToken jw = new JwToken() 
@@ -50,29 +50,49 @@ namespace BackEndDebian.Controller
             jwToken1.Add(jw);
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-        //public static bool ValidateToken(string token)
-        //{
-        //    //var tokenHandler = new JwtSecurityTokenHandler();
-        //    //var validationParameters = new TokenValidationParameters
-        //    //{
-        //    //    ValidateIssuer = true,
-        //    //    ValidateAudience = true,
-        //    //    ValidateLifetime = true,
-        //    //    ValidateIssuerSigningKey = true,
-        //    //    ValidIssuer = "BackEndDebian",
-        //    //    ValidAudience = "FrontClient",
-        //    //    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Cifra39-Cifra39-Cifra39-Cifra39-Cifra39"))
-        //    //};
-
-        //    //try
-        //    //{
-        //    //    var principal = tokenHandler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
-        //    //    return true;
-        //    //}
-        //    //catch
-        //    //{
-        //    //    return false;
-        //    //}
-        //}
+        public static bool ValidateToken(string token, List<JwToken> storedToken)
+        {
+            var findToken = storedToken.FirstOrDefault(t => t.access_token == token);
+            if (findToken == null || findToken.time_end<DateTime.Now)
+            {
+                return false;
+            }
+            try
+            {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var key = Encoding.UTF8.GetBytes("Cifra39-Cifra39-Cifra39-Cifra39-Cifra39");
+                var validationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = "BackEndDebian",
+                    ValidAudience = "FrontClient",
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ClockSkew = TimeSpan.Zero
+                };
+                SecurityToken validatedToken;
+                tokenHandler.ValidateToken(token, validationParameters, out validatedToken);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public string GetUsernameFromToken(string token)
+        {
+            try
+            {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var jwtToken = tokenHandler.ReadToken(token) as JwtSecurityToken;
+                return jwtToken?.Claims.First(claim => claim.Type == ClaimTypes.Name).Value;
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }

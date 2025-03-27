@@ -141,7 +141,7 @@ namespace BackEndDebian.Controller
                     string saltHash = user.Salt.ToString();
                     bool isPasswordValid = VerifyPassword(per, pasHash, saltHash);
                     //
-                    var jwtService = new JwtService("Cifra39-Cifra39-Cifra39-Cifra39-Cifra39", "BackEndDebian", "FrontClient");
+                    
                     string? role = "Admin";
                     token = jwtService.GenerateToken(jsonUser.UserName!, role, jwTokens);
                     string userId = user.Personid.ToString();
