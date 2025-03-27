@@ -9,13 +9,13 @@ List<JwToken> jwToken = new List<JwToken>();
 
 HttpClient httpClient = new HttpClient();
 HttpListener server = new HttpListener();
-//server.Prefixes.Add("http://193.104.57.148:8080/connection/");
-server.Prefixes.Add("http://127.0.0.1:8888/connection/");
+server.Prefixes.Add("http://193.104.57.148:8080/connection/");
+//server.Prefixes.Add("http://127.0.0.1:8888/connection/");
 server.Start();
 while (true)
 {
     JwtService.CleanExpiredTokens(jwToken);
-    var context = await server.GetContextAsync();       //ожидает входящие запросы
+    var context = await server.GetContextAsync();       
     var body = context.Request.InputStream;
     var method = context.Request.HttpMethod;
     var encoding = context.Request.ContentEncoding;

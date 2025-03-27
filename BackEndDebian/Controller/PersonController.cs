@@ -115,14 +115,6 @@ namespace BackEndDebian.Controller
                 await DataHendler.SendJsonResponse(context, responseText);
             }
         }
-        //public async static void validateToken(string json, HttpListenerContext context)
-        //{
-        //    string jsonRes;
-        //    if (JwtService.ValidateToken(json))
-        //        jsonRes = "Ok";
-        //    else jsonRes = "Error";
-        //    await DataHendler.SendJsonResponse(context, jsonRes);
-        //}
         public async static void chekPassword(string json, HttpListenerContext context, List<JwToken> jwTokens)
         {
             string token;

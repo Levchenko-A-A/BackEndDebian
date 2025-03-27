@@ -81,19 +81,6 @@ namespace BackEndDebian.Controller
                 return false;
             }
         }
-        //public string GetUsernameFromToken(string token)
-        //{
-        //    try
-        //    {
-        //        var tokenHandler = new JwtSecurityTokenHandler();
-        //        var jwtToken = tokenHandler.ReadToken(token) as JwtSecurityToken;
-        //        return jwtToken?.Claims.First(claim => claim.Type == ClaimTypes.Name).Value;
-        //    }
-        //    catch
-        //    {
-        //        return null;
-        //    }
-        //}
         public static void CleanExpiredTokens(List<JwToken> tokens)
         {
             tokens.RemoveAll(t => t.time_end < DateTime.Now);
