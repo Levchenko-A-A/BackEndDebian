@@ -73,7 +73,7 @@ public partial class DbinventoryContext : DbContext
                 .HasColumnName("createdat");
             entity.Property(e => e.Description).HasColumnName("description");
             entity.Property(e => e.Name)
-                .HasMaxLength(255)
+                .HasMaxLength(50)
                 .HasColumnName("name");
         });
 
@@ -93,7 +93,7 @@ public partial class DbinventoryContext : DbContext
             entity.Property(e => e.Locationid).HasColumnName("locationid");
             entity.Property(e => e.Manufacturerid).HasColumnName("manufacturerid");
             entity.Property(e => e.Name)
-                .HasMaxLength(255)
+                .HasMaxLength(50)
                 .HasColumnName("name");
 
             entity.HasOne(d => d.Category).WithMany(p => p.Devices)
@@ -143,7 +143,7 @@ public partial class DbinventoryContext : DbContext
                 .HasColumnName("createdat");
             entity.Property(e => e.Description).HasColumnName("description");
             entity.Property(e => e.Name)
-                .HasMaxLength(255)
+                .HasMaxLength(50)
                 .HasColumnName("name");
         });
 
@@ -160,7 +160,7 @@ public partial class DbinventoryContext : DbContext
                 .HasColumnName("createdat");
             entity.Property(e => e.Description).HasColumnName("description");
             entity.Property(e => e.Name)
-                .HasMaxLength(255)
+                .HasMaxLength(50)
                 .HasColumnName("name");
         });
 
@@ -170,6 +170,8 @@ public partial class DbinventoryContext : DbContext
 
             entity.ToTable("persons");
 
+            entity.HasIndex(e => e.Email, "persons_email_key").IsUnique();
+
             entity.HasIndex(e => e.Personname, "persons_personname_key").IsUnique();
 
             entity.Property(e => e.Personid).HasColumnName("personid");
@@ -177,11 +179,14 @@ public partial class DbinventoryContext : DbContext
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("createdat");
+            entity.Property(e => e.Email)
+                .HasMaxLength(50)
+                .HasColumnName("email");
             entity.Property(e => e.Passwordhash)
                 .HasMaxLength(255)
                 .HasColumnName("passwordhash");
             entity.Property(e => e.Personname)
-                .HasMaxLength(255)
+                .HasMaxLength(20)
                 .HasColumnName("personname");
             entity.Property(e => e.Salt)
                 .HasMaxLength(255)

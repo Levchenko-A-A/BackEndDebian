@@ -53,6 +53,7 @@ namespace BackEndDebian.Controller
                     db.Persons.Add(new Person()
                     {
                         Personname = person.Personname,
+                        Email = person.Email,
                         Passwordhash = hashedPassword,
                         Salt = Convert.ToBase64String(salt)
                     });

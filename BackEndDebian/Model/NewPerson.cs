@@ -13,6 +13,8 @@ namespace BackEndDebian.Model
         public int Personid { get; set; }
         [JsonPropertyName("personname")]
         public string Personname { get; set; } = null!;
+        [JsonPropertyName("email")]
+        public string Email { get; set; } = null!;
         [JsonPropertyName("passwordhash")]
         public string Passwordhash { get; set; } = null!;
         [JsonPropertyName("salt")]
