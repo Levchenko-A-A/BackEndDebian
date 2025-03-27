@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace BackEndDebian.Model
 {
-    public class RequestOutput
+    class RegUser
     {
-        public static Outputter(var context)
-        {
-            
-        }
+        public string? UserName { get; set; }
+        public string? access_token { get; set; }
+        public string? Role { get; set; }
     }
 }

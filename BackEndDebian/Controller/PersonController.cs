@@ -1,6 +1,7 @@
 ﻿using BackEndDebian.Controller.StaticServic;
 using BackEndDebian.Model;
 using Microsoft.EntityFrameworkCore;
+using System.Net.Http.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -124,11 +125,11 @@ namespace BackEndDebian.Controller
         //}
         public async static void chekPassword(string json, HttpListenerContext context, List<JwToken> jwTokens)
         {
-            string answer;
             string token;
+            RegUser registerUser = new RegUser();
             using (DbinventoryContext db = new DbinventoryContext())
             {
-                var jsonUser = JsonSerializer.Deserialize<JsonUser>(json);
+                JsonUser jsonUser = JsonSerializer.Deserialize<JsonUser>(json);
                 if (jsonUser == null)
                 {
                     await DataHendler.SendJsonResponse(context, "Ошибка: некорректные данные");
@@ -136,23 +137,19 @@ namespace BackEndDebian.Controller
                 Person? user = await db.Persons.FirstOrDefaultAsync(u => u.Personname == jsonUser!.UserName);
                 if (user != null)
                 {
+
                     string per = jsonUser!.Password!.ToString();
                     string pasHash = user.Passwordhash.ToString();
                     string saltHash = user.Salt.ToString();
                     bool isPasswordValid = VerifyPassword(per, pasHash, saltHash);
-                    //
-                    
-                    string? role = "Admin";
-                    token = jwtService.GenerateToken(jsonUser.UserName!, role, jwTokens);
-                    string userId = user.Personid.ToString();
-                    answer = token;
-                    //answer = isPasswordValid ? userId : "Error";
-                    
+                    Personrole? personrole = await db.Personroles.FirstOrDefaultAsync(u => u.Personid == user!.Personid);
+                    var jwtService = new JwtService("Cifra39-Cifra39-Cifra39-Cifra39-Cifra39", "BackEndDebian", "FrontClient");
+                    registerUser.UserName = user.Personname;
+                    registerUser.Role = personrole!.Roleid.ToString();
+                    registerUser.access_token = jwtService.GenerateToken(user.Personname, personrole.Roleid.ToString()!, jwTokens);
                 }
-                else answer = "Error";
             }
-            string jsonTwo = JsonSerializer.Serialize<string>(answer);
-            string responseText = jsonTwo;
+            string responseText = JsonSerializer.Serialize<RegUser>(registerUser);
             await DataHendler.SendJsonResponse(context, responseText);
         }
         private static byte[] GenerateSalt()
