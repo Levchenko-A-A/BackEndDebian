@@ -27,7 +27,7 @@ namespace BackEndDebian.Controller
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-            int time = 30;
+            int time = 1;
             var claims = new[]
             {
             new Claim(ClaimTypes.Name, username),
