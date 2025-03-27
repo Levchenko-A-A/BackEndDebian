@@ -21,8 +21,8 @@ while (true)
     var encoding = context.Request.ContentEncoding;
     var reader = new StreamReader(body, encoding);
     string query = reader.ReadToEnd();
-    string token = context.Request.Headers[0]!;
-    string table = context.Request.Headers[1]!;
+    string token = context.Request.Headers["token"]!;
+    string table = context.Request.Headers["table"]!;
     Console.WriteLine($"Received reguest: {context.Request.Url}");
     Console.WriteLine($"Metod: {method}");
     Console.WriteLine($"Table: {table}");
