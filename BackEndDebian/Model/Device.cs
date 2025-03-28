@@ -24,6 +24,7 @@ public partial class Device
     public virtual ICollection<Barcode> Barcodes { get; set; } = new List<Barcode>();
     [JsonIgnore]
     public virtual Category? Category { get; set; }
+    //[JsonPropertyName("inventorynumbers")]
     [JsonIgnore]
     public virtual ICollection<Inventorynumber> Inventorynumbers { get; set; } = new List<Inventorynumber>();
     [JsonIgnore]
